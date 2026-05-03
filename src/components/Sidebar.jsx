@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -8,12 +7,16 @@ import {
   Briefcase, 
   Database,
   Menu,
-  X
+  X,
+  Download
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { usePWA } from '../hooks/usePWA';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
+  const { isInstallable, handleInstall } = usePWA();
   const navItems = [
+
     { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/' },
     { icon: <CheckSquare size={20} />, label: 'Tasks', path: '/tasks' },
     { icon: <Layers size={20} />, label: 'BIM Tracker', path: '/bim' },
@@ -81,7 +84,16 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             ))}
           </nav>
 
-          <div className="p-4 border-t border-slate-100 dark:border-slate-800">
+          <div className="p-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+            {isInstallable && (
+              <button 
+                onClick={handleInstall}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-600 text-white font-bold text-sm shadow-lg shadow-indigo-200 dark:shadow-none hover:bg-indigo-700 transition-all"
+              >
+                <Download size={18} />
+                <span>Install App</span>
+              </button>
+            )}
             <div className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4">
               <p className="text-xs text-slate-500 dark:text-slate-500 uppercase tracking-wider font-semibold mb-1">Status</p>
               <div className="flex items-center gap-2 text-sm text-slate-700 dark:text-slate-300">
