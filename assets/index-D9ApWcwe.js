@@ -57,6 +57,12 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
           ${e.date?`<span class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-1"><i data-lucide="calendar" size="10"></i> ${e.date}</span>`:``}
           ${e.time?`<span class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-1"><i data-lucide="clock" size="10"></i> ${e.time}m</span>`:``}
         </div>
+        ${e.status===`Completed`&&e.completionNote?`
+          <div class="mt-3 p-3 bg-emerald-50 dark:bg-emerald-900/10 rounded-xl border border-emerald-100 dark:border-emerald-900/20">
+            <p class="text-[10px] font-black uppercase text-emerald-600 mb-1 flex items-center gap-1"><i data-lucide="award" size="10"></i> Completion Ref</p>
+            <p class="text-xs text-slate-600 dark:text-slate-300 italic">${e.completionNote}</p>
+          </div>
+        `:``}
       </div>
       <div class="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all">
         <button onclick="renameTask('${e.id}', \`${e.name.replace(/`/g,"\\`")}\`)" title="Rename" class="text-slate-300 hover:text-amber-500 p-1"><i data-lucide="tag" size="16"></i></button>
@@ -166,7 +172,17 @@ lucide.createIcons({icons});\``);if(r===void 0)throw Error("`createIcons()` only
         </div>
       </div>
     </div>
-  `}window.toggleTask=(e,t)=>{Z.update(`TASKS`,e,{status:t===`Completed`?`Pending`:`Completed`}),ku(),$()},window.deleteTask=e=>{confirm(`Delete this task?`)&&(Z.remove(`TASKS`,e),ku(),$())},window.clearAllTasks=()=>{confirm(`WARNING: Are you sure you want to delete ALL tasks? This cannot be undone.`)&&(Z.set(`TASKS`,[]),ku(),$())},window.renameTask=(e,t)=>{let n=document.getElementById(`modal-container`),r=document.getElementById(`modal-content`);n.classList.remove(`hidden`),r.innerHTML=`
+  `}window.toggleTask=(e,t)=>{if(t!==`Completed`){let t=document.getElementById(`modal-container`),n=document.getElementById(`modal-content`);t.classList.remove(`hidden`),n.innerHTML=`
+      <button onclick="document.getElementById('modal-container').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors">
+        <i data-lucide="x"></i>
+      </button>
+      <h2 class="text-xl font-black mb-2">Mark as Completed</h2>
+      <p class="text-xs text-slate-400 mb-6 font-medium">Add a completion note or reference for future check.</p>
+      <textarea id="completion-note-input" placeholder="e.g. Finished Chapter 1, Got 45/50 in mock test..." class="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl mb-6 font-medium text-sm border-none outline-none h-32 resize-none"></textarea>
+      <div class="flex gap-3">
+        <button onclick="confirmToggleTask('${e}', 'Completed', '')" class="flex-1 py-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Skip Note</button>
+        <button onclick="confirmToggleTask('${e}', 'Completed', document.getElementById('completion-note-input').value)" class="flex-1 bg-green-600 hover:bg-green-700 transition-colors text-white py-4 rounded-2xl font-black shadow-lg shadow-green-100 dark:shadow-none">Complete</button>
+      </div>`,$(),setTimeout(()=>document.getElementById(`completion-note-input`).focus(),50)}else Z.update(`TASKS`,e,{status:`Pending`,completionNote:``}),ku(),$()},window.confirmToggleTask=(e,t,n)=>{Z.update(`TASKS`,e,{status:t,completionNote:n}),document.getElementById(`modal-container`).classList.add(`hidden`),ku(),$()},window.deleteTask=e=>{confirm(`Delete this task?`)&&(Z.remove(`TASKS`,e),ku(),$())},window.clearAllTasks=()=>{confirm(`WARNING: Are you sure you want to delete ALL tasks? This cannot be undone.`)&&(Z.set(`TASKS`,[]),ku(),$())},window.renameTask=(e,t)=>{let n=document.getElementById(`modal-container`),r=document.getElementById(`modal-content`);n.classList.remove(`hidden`),r.innerHTML=`
     <button onclick="document.getElementById('modal-container').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors">
       <i data-lucide="x"></i>
     </button>
