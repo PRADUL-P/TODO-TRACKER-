@@ -1,13 +1,160 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ludarp-tracker</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/pwa-192x192.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUDARP Tracker | Productivity System</title>
+  <link rel="stylesheet" href="/src/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
+  <div id="app" class="flex min-h-screen overflow-x-hidden">
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-toggle" class="lg:hidden fixed top-4 left-4 z-[60] p-2 bg-white dark:bg-slate-900 rounded-xl shadow-lg border border-slate-200 dark:border-slate-800">
+      <i data-lucide="menu"></i>
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 hidden backdrop-blur-sm lg:hidden"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 z-50 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+      <div class="flex flex-col h-full">
+        <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+          <h1 class="text-xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent uppercase tracking-tighter">
+            LUDARP Tracker
+          </h1>
+          <button id="sidebar-close" class="lg:hidden p-2 text-slate-500">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2" id="nav-links">
+          <button data-section="dashboard" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-left">
+            <i data-lucide="layout-dashboard" size="20"></i>
+            <span class="font-semibold">Dashboard</span>
+          </button>
+          <button data-section="tasks" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-left">
+            <i data-lucide="check-square" size="20"></i>
+            <span class="font-semibold">Task Scheduler</span>
+          </button>
+          <button data-section="bim" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-left">
+            <i data-lucide="layers" size="20"></i>
+            <span class="font-semibold">BIM Tracker</span>
+          </button>
+          <button data-section="psc" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-left">
+            <i data-lucide="graduation-cap" size="20"></i>
+            <span class="font-semibold">PSC Tracker</span>
+          </button>
+          <button data-section="projects" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-left">
+            <i data-lucide="briefcase" size="20"></i>
+            <span class="font-semibold">Project Tracker</span>
+          </button>
+          <button data-section="data" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 text-left">
+            <i data-lucide="database" size="20"></i>
+            <span class="font-semibold">Data Management</span>
+          </button>
+        </nav>
+
+        <div class="p-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+          <button id="pwa-install-btn" class="hidden w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-indigo-600 text-white font-bold text-sm shadow-lg shadow-indigo-200 dark:shadow-none hover:bg-indigo-700 transition-all">
+            <i data-lucide="download" size="18"></i>
+            <span>Install App</span>
+          </button>
+          <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-4">
+            <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mb-1">System Status</p>
+            <div class="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300">
+              <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+              LocalStorage Active
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 lg:ml-64 flex flex-col min-w-0 transition-all duration-300">
+      <!-- Top Bar -->
+      <header class="sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 px-4 lg:px-8 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-black shadow-lg">
+            LT
+          </div>
+          <div>
+            <h2 id="current-section-title" class="text-lg font-bold">Dashboard</h2>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+            <i data-lucide="bell" size="20"></i>
+          </button>
+          <button id="theme-toggle" class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+            <i data-lucide="sun" id="sun-icon"></i>
+            <i data-lucide="moon" id="moon-icon" class="hidden"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Sections -->
+      <div id="content" class="p-4 lg:p-8 flex-1">
+        
+        <!-- Dashboard Section -->
+        <section id="section-dashboard" class="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboard-stats">
+            <!-- Stats cards will be injected here -->
+          </div>
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm">
+              <h3 class="text-lg font-bold mb-6">Learning & Exam Progress</h3>
+              <div class="h-64">
+                <canvas id="progressChart"></canvas>
+              </div>
+            </div>
+            <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col items-center justify-center">
+              <h3 class="text-lg font-bold mb-6 w-full">Task Efficiency</h3>
+              <div class="w-full max-w-[200px]">
+                <canvas id="taskChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tasks Section -->
+        <section id="section-tasks" class="hidden space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div class="flex justify-between items-center">
+            <h2 class="text-xl font-bold">Daily Priority List</h2>
+            <button id="add-task-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm shadow-lg shadow-indigo-200 hover:scale-105 transition-transform flex items-center gap-2">
+              <i data-lucide="plus" size="18"></i> New Task
+            </button>
+          </div>
+          <!-- Task filters and list will go here -->
+          <div id="task-list-container" class="space-y-3"></div>
+        </section>
+
+        <!-- Other sections will follow same pattern... -->
+        <section id="section-bim" class="hidden"></section>
+        <section id="section-psc" class="hidden"></section>
+        <section id="section-projects" class="hidden"></section>
+        <section id="section-data" class="hidden"></section>
+
+      </div>
+
+      <footer class="p-8 border-t border-slate-200 dark:border-slate-800 text-center text-[10px] font-black uppercase tracking-widest text-slate-400">
+        LUDARP Tracker Engine v2.0 • Offline Ready
+      </footer>
+    </main>
+  </div>
+
+  <!-- Modals and Overlays -->
+  <div id="modal-container" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden animate-in fade-in duration-300">
+    <div id="modal-content" class="bg-white dark:bg-slate-900 w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl relative">
+      <!-- Modal content injected here -->
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
 </html>
