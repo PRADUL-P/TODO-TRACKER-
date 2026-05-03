@@ -162,8 +162,9 @@ function renderTasks() {
         </div>
       </div>
       <div class="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all">
-        <button onclick="editTaskModal('${t.id}')" class="text-slate-300 hover:text-indigo-500 p-1"><i data-lucide="pencil" size="16"></i></button>
-        <button onclick="deleteTask('${t.id}')" class="text-slate-300 hover:text-red-500 p-1"><i data-lucide="trash-2" size="16"></i></button>
+        <button onclick="renameTask('${t.id}', \`${t.name.replace(/`/g, '\\`')}\`)" title="Rename" class="text-slate-300 hover:text-amber-500 p-1"><i data-lucide="tag" size="16"></i></button>
+        <button onclick="editTaskModal('${t.id}')" title="Edit" class="text-slate-300 hover:text-indigo-500 p-1"><i data-lucide="pencil" size="16"></i></button>
+        <button onclick="deleteTask('${t.id}')" title="Delete" class="text-slate-300 hover:text-red-500 p-1"><i data-lucide="trash-2" size="16"></i></button>
       </div>
     </div>
   `}).join('');
@@ -259,6 +260,33 @@ function renderData() {
 window.toggleTask = (id, cur) => { storage.update('TASKS', id, { status: cur === 'Completed' ? 'Pending' : 'Completed' }); renderTasks(); initIcons(); };
 window.deleteTask = (id) => { if(confirm('Delete this task?')){ storage.remove('TASKS', id); renderTasks(); initIcons(); } };
 window.clearAllTasks = () => { if(confirm('WARNING: Are you sure you want to delete ALL tasks? This cannot be undone.')){ storage.set('TASKS', []); renderTasks(); initIcons(); } };
+
+window.renameTask = (id, currentName) => {
+  const m = document.getElementById('modal-container');
+  const c = document.getElementById('modal-content');
+  m.classList.remove('hidden');
+  c.innerHTML = `
+    <button onclick="document.getElementById('modal-container').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors">
+      <i data-lucide="x"></i>
+    </button>
+    <h2 class="text-xl font-black mb-2">Rename Task</h2>
+    <p class="text-xs text-slate-400 mb-6 font-medium">Change only the task name, nothing else.</p>
+    <input id="rename-input" type="text" value="${currentName}" class="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl mb-6 font-bold border-2 border-indigo-200 dark:border-indigo-800 outline-none focus:border-indigo-500 transition-colors">
+    <div class="flex gap-3">
+      <button onclick="document.getElementById('modal-container').classList.add('hidden')" class="flex-1 py-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 font-bold text-slate-500 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">Cancel</button>
+      <button onclick="confirmRename('${id}')" class="flex-1 bg-indigo-600 hover:bg-indigo-700 transition-colors text-white py-4 rounded-2xl font-black shadow-lg shadow-indigo-200 dark:shadow-none">Rename</button>
+    </div>`;
+  initIcons();
+  setTimeout(() => { const inp = document.getElementById('rename-input'); if(inp){ inp.focus(); inp.select(); } }, 50);
+};
+
+window.confirmRename = (id) => {
+  const newName = document.getElementById('rename-input').value.trim();
+  if (!newName) return;
+  storage.update('TASKS', id, { name: newName });
+  document.getElementById('modal-container').classList.add('hidden');
+  renderTasks(); initIcons();
+};
 
 window.addTask = () => { const name = document.getElementById('t-name').value; if(!name) return; storage.add('TASKS', { name, type: document.getElementById('t-type').value, priority: document.getElementById('t-priority').value, time: document.getElementById('t-time').value, notes: document.getElementById('t-notes').value, status: 'Pending', date: document.getElementById('t-date').value }); document.getElementById('modal-container').classList.add('hidden'); renderTasks(); initIcons(); };
 
