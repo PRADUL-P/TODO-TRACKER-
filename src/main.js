@@ -1,4 +1,4 @@
-import { createIcons, LayoutDashboard, CheckSquare, Layers, GraduationCap, Briefcase, Database, Menu, X, Bell, Sun, Moon, Plus, Trash2, Download, CheckCircle2, Circle, Tag, Calendar, Clock, TrendingUp, AlertCircle, Eye, Save, ClipboardPaste, FileJson, FileSpreadsheet, Upload, History, Award } from 'lucide';
+import { createIcons, LayoutDashboard, CheckSquare, Layers, GraduationCap, Briefcase, Database, Menu, X, Bell, Sun, Moon, Plus, Trash2, Download, CheckCircle2, Circle, Tag, Calendar, Clock, TrendingUp, AlertCircle, Eye, Save, ClipboardPaste, FileJson, FileSpreadsheet, Upload, History, Award, Pencil } from 'lucide';
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
@@ -39,7 +39,7 @@ let currentSection = 'dashboard';
 let progressChart = null;
 let taskChart = null;
 
-const sections = ['dashboard', 'tasks', 'bim', 'psc', 'projects', 'data'];
+const sections = ['dashboard', 'tasks', 'bim', 'psc', 'projects', 'data', 'about'];
 const sectionElements = sections.reduce((acc, s) => {
   acc[s] = document.getElementById(`section-${s}`);
   return acc;
@@ -48,7 +48,7 @@ const sectionElements = sections.reduce((acc, s) => {
 // --- 3. CORE FUNCTIONS ---
 function initIcons() {
   createIcons({
-    icons: { LayoutDashboard, CheckSquare, Layers, GraduationCap, Briefcase, Database, Menu, X, Bell, Sun, Moon, Plus, Trash2, Download, CheckCircle2, Circle, Tag, Calendar, Clock, TrendingUp, AlertCircle, Eye, Save, ClipboardPaste, FileJson, FileSpreadsheet, Upload, History, Award }
+    icons: { LayoutDashboard, CheckSquare, Layers, GraduationCap, Briefcase, Database, Menu, X, Bell, Sun, Moon, Plus, Trash2, Download, CheckCircle2, Circle, Tag, Calendar, Clock, TrendingUp, AlertCircle, Eye, Save, ClipboardPaste, FileJson, FileSpreadsheet, Upload, History, Award, Pencil }
   });
 }
 
@@ -75,6 +75,7 @@ function renderCurrentSection() {
   else if (currentSection === 'psc') renderPSC();
   else if (currentSection === 'projects') renderProjects();
   else if (currentSection === 'data') renderData();
+  else if (currentSection === 'about') { /* Section content is static in HTML */ }
   
   initIcons();
 }
@@ -140,18 +141,33 @@ function renderDashboard() {
 
 function renderTasks() {
   const tasks = storage.get('TASKS');
-  document.getElementById('task-list-container').innerHTML = tasks.length === 0 ? '<p class="text-center py-20 text-slate-400">No tasks yet.</p>' : tasks.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(t => `
-    <div class="flex items-center gap-4 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm group">
-      <button onclick="toggleTask('${t.id}', '${t.status}')" class="${t.status === 'Completed' ? 'text-green-500' : 'text-slate-200'}">
+  const header = tasks.length > 0 ? `<div class="flex justify-between items-center mb-4 px-2"><span class="text-xs font-bold text-slate-400 uppercase tracking-widest">${tasks.length} Tasks</span><button onclick="clearAllTasks()" class="text-xs font-bold text-red-500 hover:text-red-600 flex items-center gap-1 transition-colors"><i data-lucide="trash-2" size="12"></i> Clear All</button></div>` : '';
+  const list = tasks.length === 0 ? '<p class="text-center py-20 text-slate-400">No tasks yet.</p>' : tasks.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)).map(t => {
+    const pColor = t.priority === 'High' ? 'text-red-500 bg-red-50 dark:bg-red-900/20' : t.priority === 'Medium' ? 'text-amber-500 bg-amber-50 dark:bg-amber-900/20' : 'text-blue-500 bg-blue-50 dark:bg-blue-900/20';
+    return `
+    <div class="flex items-start gap-4 p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-sm group">
+      <button onclick="toggleTask('${t.id}', '${t.status}')" class="mt-1 ${t.status === 'Completed' ? 'text-green-500' : 'text-slate-200 hover:text-indigo-500'}">
         <i data-lucide="${t.status === 'Completed' ? 'check-circle-2' : 'circle'}" size="24"></i>
       </button>
       <div class="flex-1 min-w-0">
-        <h4 class="font-bold truncate ${t.status === 'Completed' ? 'line-through opacity-40' : ''}">${t.name}</h4>
-        <div class="flex gap-3 mt-1"><span class="text-[10px] font-black uppercase text-slate-400">${t.type}</span></div>
+        <div class="flex items-center gap-2 mb-1">
+          <h4 class="font-bold truncate ${t.status === 'Completed' ? 'line-through opacity-40' : ''}">${t.name}</h4>
+          ${t.priority ? `<span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-md ${pColor}">${t.priority}</span>` : ''}
+        </div>
+        ${t.notes ? `<p class="text-xs text-slate-500 dark:text-slate-400 mb-2 line-clamp-2 ${t.status === 'Completed' ? 'opacity-40' : ''}">${t.notes}</p>` : ''}
+        <div class="flex flex-wrap gap-3 mt-1">
+          <span class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-1"><i data-lucide="tag" size="10"></i> ${t.type}</span>
+          ${t.date ? `<span class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-1"><i data-lucide="calendar" size="10"></i> ${t.date}</span>` : ''}
+          ${t.time ? `<span class="text-[10px] font-black uppercase text-slate-400 flex items-center gap-1"><i data-lucide="clock" size="10"></i> ${t.time}m</span>` : ''}
+        </div>
       </div>
-      <button onclick="deleteTask('${t.id}')" class="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-red-500"><i data-lucide="trash-2" size="18"></i></button>
+      <div class="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all">
+        <button onclick="editTaskModal('${t.id}')" class="text-slate-300 hover:text-indigo-500 p-1"><i data-lucide="pencil" size="16"></i></button>
+        <button onclick="deleteTask('${t.id}')" class="text-slate-300 hover:text-red-500 p-1"><i data-lucide="trash-2" size="16"></i></button>
+      </div>
     </div>
-  `).join('');
+  `}).join('');
+  document.getElementById('task-list-container').innerHTML = header + list;
 }
 
 function renderBIM() {
@@ -227,8 +243,13 @@ function renderData() {
       </div>
       <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800">
         <h2 class="text-xl font-black mb-2">Smart Import</h2>
-        <textarea id="smart-text" class="w-full h-40 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 font-mono text-xs mb-4" placeholder="BIM:\n- Learn Revit\nPSC:\n- Quant Math"></textarea>
-        <button onclick="smartImport()" class="w-full bg-orange-500 text-white py-4 rounded-2xl font-black uppercase tracking-widest">Import All</button>
+        <select id="smart-import-cat" class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 font-bold text-sm mb-4 outline-none">
+          <option value="TASKS">Tasks Scheduler</option>
+          <option value="BIM_PROGRESS">BIM Tracker</option>
+          <option value="PSC_TRACKER">PSC Tracker</option>
+        </select>
+        <textarea id="smart-text" class="w-full h-40 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 font-mono text-xs mb-4" placeholder="Paste your syllabus or tasks here..."></textarea>
+        <button onclick="smartImport()" class="w-full bg-orange-500 hover:bg-orange-600 transition-colors text-white py-4 rounded-2xl font-black uppercase tracking-widest">Import All</button>
       </div>
     </div>
   `;
@@ -236,8 +257,39 @@ function renderData() {
 
 // --- 5. WINDOW FUNCTIONS ---
 window.toggleTask = (id, cur) => { storage.update('TASKS', id, { status: cur === 'Completed' ? 'Pending' : 'Completed' }); renderTasks(); initIcons(); };
-window.deleteTask = (id) => { if(confirm('Delete?')){ storage.remove('TASKS', id); renderTasks(); initIcons(); } };
-window.addTask = () => { const name = document.getElementById('t-name').value; if(!name) return; storage.add('TASKS', { name, type: document.getElementById('t-type').value, status: 'Pending', date: document.getElementById('t-date').value }); document.getElementById('modal-container').classList.add('hidden'); renderTasks(); initIcons(); };
+window.deleteTask = (id) => { if(confirm('Delete this task?')){ storage.remove('TASKS', id); renderTasks(); initIcons(); } };
+window.clearAllTasks = () => { if(confirm('WARNING: Are you sure you want to delete ALL tasks? This cannot be undone.')){ storage.set('TASKS', []); renderTasks(); initIcons(); } };
+
+window.addTask = () => { const name = document.getElementById('t-name').value; if(!name) return; storage.add('TASKS', { name, type: document.getElementById('t-type').value, priority: document.getElementById('t-priority').value, time: document.getElementById('t-time').value, notes: document.getElementById('t-notes').value, status: 'Pending', date: document.getElementById('t-date').value }); document.getElementById('modal-container').classList.add('hidden'); renderTasks(); initIcons(); };
+
+window.editTaskModal = (id) => {
+  const t = storage.get('TASKS').find(x => x.id === id);
+  if(!t) return;
+  const m = document.getElementById('modal-container'); const c = document.getElementById('modal-content'); m.classList.remove('hidden');
+  c.innerHTML = `
+    <button onclick="document.getElementById('modal-container').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors">
+      <i data-lucide="x"></i>
+    </button>
+    <h2 class="text-xl font-black mb-6">Edit Task</h2>
+    <input id="e-name" type="text" value="${t.name}" class="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl mb-3 font-bold border-none outline-none">
+    <textarea id="e-notes" class="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl mb-3 font-medium text-sm border-none outline-none h-20 resize-none">${t.notes || ''}</textarea>
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <select id="e-type" class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none font-bold outline-none"><option ${t.type==='BIM'?'selected':''}>BIM</option><option ${t.type==='PSC'?'selected':''}>PSC</option><option ${t.type==='Project'?'selected':''}>Project</option><option ${t.type==='Personal'?'selected':''}>Personal</option></select>
+      <select id="e-priority" class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none font-bold outline-none"><option ${t.priority==='Low'?'selected':''}>Low</option><option ${t.priority==='Medium'?'selected':''}>Medium</option><option ${t.priority==='High'?'selected':''}>High</option></select>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      <input id="e-date" type="date" value="${t.date || ''}" class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none font-bold outline-none">
+      <input id="e-time" type="number" value="${t.time || ''}" class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none font-bold outline-none">
+    </div>
+    <button onclick="updateTask('${t.id}')" class="w-full bg-indigo-600 hover:bg-indigo-700 transition-colors text-white py-4 rounded-2xl font-black shadow-lg shadow-indigo-200 dark:shadow-none">Save Changes</button>`;
+  initIcons();
+};
+
+window.updateTask = (id) => {
+  const name = document.getElementById('e-name').value; if(!name) return;
+  storage.update('TASKS', id, { name, type: document.getElementById('e-type').value, priority: document.getElementById('e-priority').value, time: document.getElementById('e-time').value, notes: document.getElementById('e-notes').value, date: document.getElementById('e-date').value });
+  document.getElementById('modal-container').classList.add('hidden'); renderTasks(); initIcons();
+};
 window.addBIM = () => { const topic = document.getElementById('bim-topic').value; if(!topic) return; storage.add('BIM_PROGRESS', { topic, stage: document.getElementById('bim-stage').value, completed: false }); renderBIM(); initIcons(); };
 window.toggleBIM = (id, cur) => { storage.update('BIM_PROGRESS', id, { completed: !cur }); renderBIM(); initIcons(); };
 window.deleteBIM = (id) => { if(confirm('Delete?')){ storage.remove('BIM_PROGRESS', id); renderBIM(); initIcons(); } };
@@ -252,11 +304,84 @@ window.deleteProject = (id) => { if(confirm('Delete?')){ storage.remove('PROJECT
 window.exportJSON = () => { const d = { TASKS: storage.get('TASKS'), BIM: storage.get('BIM_PROGRESS'), PSC: storage.get('PSC_TRACKER'), PROJECTS: storage.get('PROJECTS') }; const b = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' }); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = 'ludarp_backup.json'; a.click(); };
 window.exportCSV = () => { const t = storage.get('TASKS'); const c = "Name,Type,Status,Date\n" + t.map(x => `${x.name},${x.type},${x.status},${x.date}`).join("\n"); const b = new Blob([c], { type: 'text/csv' }); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = 'tasks.csv'; a.click(); };
 window.importJSON = (e) => { const f = e.target.files[0]; const r = new FileReader(); r.onload = (v) => { const d = JSON.parse(v.target.result); storage.set('TASKS', d.TASKS || []); storage.set('BIM_PROGRESS', d.BIM || []); storage.set('PSC_TRACKER', d.PSC || []); storage.set('PROJECTS', d.PROJECTS || []); alert('Imported!'); renderData(); }; r.readAsText(f); };
-window.smartImport = () => { const t = document.getElementById('smart-text').value; t.split('\n').forEach(line => { /* Logic integrated... */ }); alert('Imported!'); document.getElementById('smart-text').value = ''; };
+window.smartImport = () => {
+  const text = document.getElementById('smart-text').value;
+  const targetCategory = document.getElementById('smart-import-cat').value;
+  const lines = text.split('\n');
+  let currentWeek = '';
+  let currentDayOffset = 0;
+  let today = new Date();
+  let count = 0;
+
+  lines.forEach(line => {
+    let t = line.trim();
+    if (!t) return;
+    
+    if (t.toUpperCase().includes('WEEK')) {
+      currentWeek = t.replace(/🗓️/g, '').trim();
+    } else if (t.toLowerCase().startsWith('day')) {
+      let match = t.match(/day\s*(\d+)/i);
+      if (match) currentDayOffset = parseInt(match[1]) - 1;
+    } else if (t.includes('|') || t.startsWith('-')) {
+      let parts = t.includes('|') ? t.split('|').map(s => s.trim()) : [t.replace(/^-/, '').trim()];
+      let name = parts[0];
+      let subject = parts[1] || 'Imported';
+      let priority = parts[2] || 'Medium';
+      
+      if (!['High', 'Medium', 'Low'].includes(priority)) priority = 'Medium';
+      
+      if (targetCategory === 'TASKS') {
+        let targetDate = new Date(today);
+        targetDate.setDate(today.getDate() + currentDayOffset);
+        storage.add('TASKS', {
+          name: `${name} [${subject}]`,
+          type: 'PSC',
+          priority: priority,
+          notes: currentWeek ? `${currentWeek} - Day ${currentDayOffset + 1}` : `Day ${currentDayOffset + 1}`,
+          time: '',
+          status: 'Pending',
+          date: targetDate.toISOString().split('T')[0]
+        });
+      } else if (targetCategory === 'BIM_PROGRESS') {
+        storage.add('BIM_PROGRESS', { topic: name, stage: subject !== 'Imported' ? subject : 'Revit', completed: false });
+      } else if (targetCategory === 'PSC_TRACKER') {
+        storage.add('PSC_TRACKER', { topic: name, subject: subject !== 'Imported' ? subject : 'GK / Current Affairs', completed: false, revisionCount: 0 });
+      }
+      count++;
+    }
+  });
+  
+  if (count > 0) {
+    alert(`Successfully imported ${count} items into ${targetCategory}!`);
+    document.getElementById('smart-text').value = '';
+    renderData();
+    renderTasks();
+    renderBIM();
+    renderPSC();
+  } else {
+    alert('No valid items found. Use "Topic | Subject | Priority" format.');
+  }
+};
 
 document.getElementById('add-task-btn').addEventListener('click', () => {
   const m = document.getElementById('modal-container'); const c = document.getElementById('modal-content'); m.classList.remove('hidden');
-  c.innerHTML = `<h2 class="text-xl font-black mb-6">New Task</h2><input id="t-name" type="text" placeholder="What's next?" class="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl mb-4 font-bold border-none"><div class="flex gap-2 mb-4"><select id="t-type" class="flex-1 p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none font-bold"><option>BIM</option><option>PSC</option><option>Project</option></select><input id="t-date" type="date" value="${new Date().toISOString().split('T')[0]}" class="flex-1 p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none font-bold"></div><button onclick="addTask()" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black">Add Task</button>`;
+  c.innerHTML = `
+    <button onclick="document.getElementById('modal-container').classList.add('hidden')" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors">
+      <i data-lucide="x"></i>
+    </button>
+    <h2 class="text-xl font-black mb-6">New Task</h2>
+    <input id="t-name" type="text" placeholder="What's next?" class="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl mb-3 font-bold border-none outline-none">
+    <textarea id="t-notes" placeholder="Notes (optional)..." class="w-full p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl mb-3 font-medium text-sm border-none outline-none h-20 resize-none"></textarea>
+    <div class="grid grid-cols-2 gap-3 mb-3">
+      <select id="t-type" class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none font-bold outline-none"><option>BIM</option><option>PSC</option><option>Project</option><option>Personal</option></select>
+      <select id="t-priority" class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none font-bold outline-none"><option>Low</option><option selected>Medium</option><option>High</option></select>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mb-6">
+      <input id="t-date" type="date" value="${new Date().toISOString().split('T')[0]}" class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none font-bold outline-none">
+      <input id="t-time" type="number" placeholder="Est. Mins" class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl border-none font-bold outline-none">
+    </div>
+    <button onclick="addTask()" class="w-full bg-indigo-600 hover:bg-indigo-700 transition-colors text-white py-4 rounded-2xl font-black shadow-lg shadow-indigo-200 dark:shadow-none">Add Task</button>`;
+  initIcons();
 });
 
 // Sidebar & Theme
@@ -267,3 +392,33 @@ document.getElementById('theme-toggle').addEventListener('click', () => { docume
 // Init
 switchSection('dashboard');
 initIcons();
+
+// --- 6. PWA INSTALL LOGIC ---
+let deferredPrompt;
+const installBtn = document.getElementById('pwa-install-btn');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent Chrome 67 and earlier from automatically showing the prompt
+  e.preventDefault();
+  // Stash the event so it can be triggered later.
+  deferredPrompt = e;
+  // Update UI to notify the user they can add to home screen
+  installBtn.classList.remove('hidden');
+});
+
+installBtn.addEventListener('click', async () => {
+  if (deferredPrompt) {
+    // Show the install prompt
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      console.log('User accepted the A2HS prompt');
+    } else {
+      console.log('User dismissed the A2HS prompt');
+    }
+    // We've used the prompt, and can't use it again, throw it away
+    deferredPrompt = null;
+    installBtn.classList.add('hidden');
+  }
+});
