@@ -8,8 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/TODO-TRACKER-/assets/index-COEYn8x_.js"></script>
-  <link rel="stylesheet" crossorigin href="/TODO-TRACKER-/assets/index-3-nPlRqw.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs" type="module"></script>
+  <script type="module" crossorigin src="/TODO-TRACKER-/assets/index-CPkT_UVZ.js"></script>
+  <link rel="stylesheet" crossorigin href="/TODO-TRACKER-/assets/index-Bk9VXqis.css">
 <link rel="manifest" href="/TODO-TRACKER-/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/TODO-TRACKER-/registerSW.js"></script></head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
   <div id="app" class="flex min-h-screen overflow-x-hidden">
@@ -85,10 +86,10 @@
           <button id="zen-toggle" class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all" title="Zen Focus Mode">
             <i data-lucide="maximize" size="20"></i>
           </button>
-          <button id="dashboard-voice-btn" class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all" title="Voice Assistant">
+          <button id="dashboard-voice-btn" onclick="window.startVoiceCommand(this)" class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all" title="Voice Assistant">
             <i data-lucide="mic" size="20"></i>
           </button>
-          <button id="theme-toggle" class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all">
+          <button id="theme-toggle" onclick="window.toggleTheme()" class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all">
             <span id="sun-icon-container"><i data-lucide="sun" size="20"></i></span>
             <span id="moon-icon-container" class="hidden"><i data-lucide="moon" size="20"></i></span>
           </button>
@@ -149,8 +150,8 @@
                 <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size="16"></i>
                 <input id="task-search" type="text" placeholder="Search tasks..." class="w-full pl-12 pr-4 py-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl text-sm font-medium outline-none focus:border-indigo-500 transition-all">
               </div>
-              <button id="voice-task-btn" class="p-2.5 bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-indigo-600 rounded-xl transition-all" title="Voice Command">
-                <i data-lucide="menu" class="rotate-90" size="18"></i>
+              <button id="voice-task-btn" onclick="window.startVoiceCommand(this)" class="p-2.5 bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-indigo-600 rounded-xl transition-all" title="Voice Command">
+                <i data-lucide="mic" size="18"></i>
               </button>
               <button id="add-task-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm shadow-lg shadow-indigo-200 hover:scale-105 transition-transform flex items-center gap-2 shrink-0">
                 <i data-lucide="plus" size="18"></i> New Task
@@ -176,7 +177,7 @@
                 <div>
                   <h2 class="text-3xl font-black tracking-tighter">LUDARP Tracker</h2>
                   <p class="text-slate-500 font-bold uppercase text-[10px] tracking-widest flex items-center gap-2">
-                    <span class="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 rounded-md">Version 1.1</span>
+                    <span class="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 rounded-md">Version 1.2</span>
                     <span>•</span>
                     <span>Stable Release</span>
                   </p>
@@ -251,7 +252,7 @@ Priority levels must be High, Medium, or Low."
       </div>
 
       <footer class="p-8 border-t border-slate-200 dark:border-slate-800 text-center text-[10px] font-black uppercase tracking-widest text-slate-400">
-        LUDARP Tracker Engine v1.1 • Offline Ready
+        LUDARP Tracker Engine v1.2 • Offline Ready
       </footer>
     </main>
   </div>
