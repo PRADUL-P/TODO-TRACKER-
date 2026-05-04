@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/TODO-TRACKER-/assets/index-DYUihC1z.js"></script>
-  <link rel="stylesheet" crossorigin href="/TODO-TRACKER-/assets/index-BxuKr-5z.css">
+  <script type="module" crossorigin src="/TODO-TRACKER-/assets/index-72UTr03u.js"></script>
+  <link rel="stylesheet" crossorigin href="/TODO-TRACKER-/assets/index-vSzXLmNB.css">
 <link rel="manifest" href="/TODO-TRACKER-/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/TODO-TRACKER-/registerSW.js"></script></head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
   <div id="app" class="flex min-h-screen overflow-x-hidden">
@@ -143,6 +143,46 @@
         <section id="section-projects" class="hidden"></section>
         <section id="section-data" class="hidden"></section>
         <section id="section-about" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-xl">
+              <div class="flex items-center gap-6 mb-8">
+                <div class="w-20 h-20 bg-indigo-600 rounded-3xl flex items-center justify-center shadow-2xl shadow-indigo-200 dark:shadow-none">
+                  <i data-lucide="layout-dashboard" class="text-white" size="40"></i>
+                </div>
+                <div>
+                  <h2 class="text-3xl font-black tracking-tighter">LUDARP Tracker</h2>
+                  <p class="text-slate-500 font-bold uppercase text-[10px] tracking-widest flex items-center gap-2">
+                    <span class="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 rounded-md">v5.5 Hyperdrive</span>
+                    <span>•</span>
+                    <span>Stable Release</span>
+                  </p>
+                </div>
+              </div>
+              <p class="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                Welcome to the next generation of the LUDARP Productivity Ecosystem. This system is a high-performance PWA (Progressive Web App) designed for technical professionals and students to bridge the gap between skill acquisition and competitive exam preparation.
+              </p>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                  <p class="text-[9px] font-black uppercase text-slate-400 mb-1">Developer</p>
+                  <p class="font-bold text-sm">LUDARP Labs</p>
+                </div>
+                <div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                  <p class="text-[9px] font-black uppercase text-slate-400 mb-1">Engine</p>
+                  <p class="font-bold text-sm">Titanium Core v5.5</p>
+                </div>
+              </div>
+            </div>
+            <div class="bg-gradient-to-br from-indigo-600 to-purple-700 p-8 rounded-[2.5rem] text-white shadow-xl flex flex-col justify-between">
+              <div>
+                <h3 class="text-xl font-black mb-2">PWA Ready</h3>
+                <p class="text-indigo-100 text-xs leading-relaxed">Install this app on your phone or desktop for full offline access and a premium native experience.</p>
+              </div>
+              <button id="pwa-install-btn-about" class="mt-6 w-full py-4 bg-white/20 hover:bg-white/30 backdrop-blur-md rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all">
+                Install System
+              </button>
+            </div>
+          </div>
+
           <div class="bg-white dark:bg-slate-900 p-8 rounded-[2.5rem] border border-slate-200 dark:border-slate-800 shadow-xl">
             <h2 class="text-2xl font-black mb-6 flex items-center gap-3">
               <i data-lucide="alert-circle" class="text-indigo-600"></i> Smart Import Guide
@@ -187,7 +227,7 @@ Priority levels must be High, Medium, or Low."
       </div>
 
       <footer class="p-8 border-t border-slate-200 dark:border-slate-800 text-center text-[10px] font-black uppercase tracking-widest text-slate-400">
-        LUDARP Tracker Engine v2.0 • Offline Ready
+        LUDARP Tracker Engine v5.5 Hyperdrive • Titanium Core • Offline Ready
       </footer>
     </main>
   </div>
