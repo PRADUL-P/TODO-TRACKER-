@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/TODO-TRACKER-/assets/index-_7OQcxwO.js"></script>
+  <script type="module" crossorigin src="/TODO-TRACKER-/assets/index-BPnsPjLP.js"></script>
   <link rel="stylesheet" crossorigin href="/TODO-TRACKER-/assets/index-BVLVZSZB.css">
 <link rel="manifest" href="/TODO-TRACKER-/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/TODO-TRACKER-/registerSW.js"></script></head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
@@ -85,9 +85,12 @@
           <button id="zen-toggle" class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all" title="Zen Focus Mode">
             <i data-lucide="maximize" size="20"></i>
           </button>
+          <button id="dashboard-voice-btn" class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all" title="Voice Assistant">
+            <i data-lucide="mic" size="20"></i>
+          </button>
           <button id="theme-toggle" class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all">
-            <i data-lucide="sun" id="sun-icon" size="20"></i>
-            <i data-lucide="moon" id="moon-icon" class="hidden" size="20"></i>
+            <span id="sun-icon-container"><i data-lucide="sun" size="20"></i></span>
+            <span id="moon-icon-container" class="hidden"><i data-lucide="moon" size="20"></i></span>
           </button>
           <button class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-2xl transition-all">
             <i data-lucide="bell" size="20"></i>
