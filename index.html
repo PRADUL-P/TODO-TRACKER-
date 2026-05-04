@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script type="module" crossorigin src="/TODO-TRACKER-/assets/index-DgDKg9-j.js"></script>
-  <link rel="stylesheet" crossorigin href="/TODO-TRACKER-/assets/index-Di_EQVEE.css">
+  <script type="module" crossorigin src="/TODO-TRACKER-/assets/index-DHSXo6CF.js"></script>
+  <link rel="stylesheet" crossorigin href="/TODO-TRACKER-/assets/index-BphBJfPj.css">
 <link rel="manifest" href="/TODO-TRACKER-/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/TODO-TRACKER-/registerSW.js"></script></head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
   <div id="app" class="flex min-h-screen overflow-x-hidden">
@@ -110,11 +110,29 @@
                 <canvas id="progressChart"></canvas>
               </div>
             </div>
-            <div class="premium-card p-6 flex flex-col items-center justify-center">
-              <h3 class="text-lg font-bold mb-6 w-full">Task Efficiency</h3>
-              <div class="w-full max-w-[200px]">
+            <div class="premium-card p-6">
+              <h3 class="text-lg font-bold mb-6">Task Distribution</h3>
+              <div class="h-64 flex items-center justify-center">
                 <canvas id="taskChart"></canvas>
               </div>
+            </div>
+          </div>
+
+          <!-- Calendar Section -->
+          <div class="premium-card p-8">
+            <div class="flex items-center justify-between mb-8">
+              <div>
+                <h3 class="text-2xl font-black">Task Calendar</h3>
+                <p class="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Plan your study schedule</p>
+              </div>
+              <div class="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl">
+                <button id="prev-month" class="p-2 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><i data-lucide="play" class="rotate-180" size="16"></i></button>
+                <span id="calendar-month-year" class="px-4 font-black text-sm min-w-32 text-center uppercase tracking-tighter">May 2026</span>
+                <button id="next-month" class="p-2 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-all"><i data-lucide="play" size="16"></i></button>
+              </div>
+            </div>
+            <div id="calendar-grid" class="grid grid-cols-7 gap-2">
+              <!-- Calendar will be injected here -->
             </div>
           </div>
         </section>
