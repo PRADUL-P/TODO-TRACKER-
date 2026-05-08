@@ -9,8 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs" type="module"></script>
-  <script type="module" crossorigin src="/TODO-TRACKER-/assets/index-BQoz-ycH.js"></script>
-  <link rel="stylesheet" crossorigin href="/TODO-TRACKER-/assets/index-BFiSPs7j.css">
+  <script type="module" crossorigin src="/TODO-TRACKER-/assets/index-6s2_93qU.js"></script>
+  <link rel="stylesheet" crossorigin href="/TODO-TRACKER-/assets/index-Bn-cixRU.css">
 <link rel="manifest" href="/TODO-TRACKER-/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/TODO-TRACKER-/registerSW.js"></script></head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen">
   <div id="app" class="flex min-h-screen overflow-x-hidden">
@@ -166,6 +166,43 @@
         <section id="section-bim" class="hidden"></section>
         <section id="section-psc" class="hidden"></section>
         <section id="section-projects" class="hidden"></section>
+        
+        <!-- Wallet Section -->
+        <section id="section-wallet" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="wallet-stats">
+            <!-- Wallet stats cards will be injected here -->
+          </div>
+          <div class="premium-card p-6">
+            <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-6">
+              <h3 class="text-xl font-bold">Transaction History</h3>
+              <div class="flex gap-2">
+                <button onclick="addTransactionModal('Expense')" class="bg-red-500 text-white px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-red-100 dark:shadow-none hover:scale-105 transition-transform flex items-center gap-2">
+                  <i data-lucide="plus" size="14"></i> Expense
+                </button>
+                <button onclick="addTransactionModal('Income')" class="bg-emerald-500 text-white px-4 py-2 rounded-xl font-bold text-xs uppercase tracking-widest shadow-lg shadow-emerald-100 dark:shadow-none hover:scale-105 transition-transform flex items-center gap-2">
+                  <i data-lucide="plus" size="14"></i> Income
+                </button>
+              </div>
+            </div>
+            <div id="transaction-list" class="space-y-3">
+              <!-- Transactions will be injected here -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Dues Section -->
+        <section id="section-dues" class="hidden space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            <h2 class="text-xl font-bold">Dues & Debt Tracker</h2>
+            <button onclick="addDueModal()" class="bg-indigo-600 text-white px-4 py-2 rounded-xl font-bold text-sm shadow-lg shadow-indigo-200 hover:scale-105 transition-transform flex items-center gap-2 shrink-0">
+              <i data-lucide="plus" size="18"></i> New Due Record
+            </button>
+          </div>
+          <div id="dues-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Dues will be injected here -->
+          </div>
+        </section>
+
         <section id="section-data" class="hidden"></section>
         <section id="section-about" class="hidden space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
